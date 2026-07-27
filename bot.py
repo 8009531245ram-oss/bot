@@ -152,8 +152,6 @@ def run():
 def keep_alive():
     t = Thread(target=run)
     t.start()
-
-# अपना बोट शुरू करने से पहले इसे कॉल करें
 keep_alive()
 @bot.message_handler(commands=['create'])
 def create_link(message):
