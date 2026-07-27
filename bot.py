@@ -156,7 +156,7 @@ def keep_alive():
 # अपना बोट शुरू करने से पहले इसे कॉल करें
 keep_alive()
     
-    bot.reply_to(message, help_text)
+    bot.reply_to(message,help_text)
 @bot.message_handler(commands=['create'])
 def create_link(message):
     user_state[message.from_user.id] = "waiting_for_link"
