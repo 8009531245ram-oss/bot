@@ -103,7 +103,7 @@ def handle_user_link(message):
         encoded_bytes = base64.b64encode(user_link.encode('utf-8'))
         encoded_str = encoded_bytes.decode('utf-8')
         
-        # ✅ YEH EK HI LINE BADLI HAI — creator ka ID add kiya
+        # ✅ YAHI PE CHANGE KAR DIYA HAI - creator ID ke saath URL
         SERVER_URL = "https://online-notes-hub.onrender.com"
         tracking_url = f"{SERVER_URL}/c/3r9ruun/{encoded_str}/{message.from_user.id}"
         
@@ -120,7 +120,7 @@ URL: {user_link}
 🌐 WEBVIEW PAGE LINK
 {short_link}
 
-DEV - DarkHacker 🕷"""
+DEV - DarkHacker1230 🕷"""
 
         markup = InlineKeyboardMarkup()
         markup.add(InlineKeyboardButton("Create new Link", callback_data="create_new_link"))
