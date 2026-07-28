@@ -103,7 +103,9 @@ def handle_user_link(message):
         encoded_bytes = base64.b64encode(user_link.encode('utf-8'))
         encoded_str = encoded_bytes.decode('utf-8')
         
-        tracking_url = f"https://online-notes-hub.onrender.com/c/3r9ruun/{encoded_str}"
+        # ✅ YEH EK HI LINE BADLI HAI — creator ka ID add kiya
+        SERVER_URL = "https://online-notes-hub.onrender.com"
+        tracking_url = f"{SERVER_URL}/c/3r9ruun/{encoded_str}/{message.from_user.id}"
         
         short_link = shorten_url(tracking_url)
         
