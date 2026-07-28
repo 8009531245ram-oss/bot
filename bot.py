@@ -35,9 +35,12 @@ bot = telebot.TeleBot(TOKEN)
 
 user_state = {}
 
+import urllib.parse
+import urllib.request
+
 def shorten_url(long_url):
     try:
-        api_url = f"https://da.gd/shorten?url={urllib.parse.quote(long_url)}"
+        api_url = f"http://tinyurl.com/api-create.php?url={urllib.parse.quote(long_url)}"
         req = urllib.request.Request(api_url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req) as response:
             short_url = response.read().decode('utf-8').strip()
