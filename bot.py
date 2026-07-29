@@ -6,7 +6,7 @@ import base64
 from flask import Flask
 from threading import Thread
 
-TOKEN = '8840717306:AAEOhGfFnZsSWGtdOChaJaGC4JLfReeKBaU'
+TOKEN = '8840717306:AAFnJ695LhZEm8kZOPdMyxHHE2EOselmxec'
 
 CHANNEL_USERNAME = '@DARKHACKER1230'
 
