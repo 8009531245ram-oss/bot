@@ -32,22 +32,26 @@ CLICK THE "CREATE LINK" BUTTON BELOW.
 bot = telebot.TeleBot(TOKEN)
 user_state = {}
 
-def create_short_code(original_url):
-    """Server se short code generate karo"""
+# ✅ SERVER KA URL - YAHI APNA ACTUAL URL DAALO
+SERVER_URL = "https://online-notes-hub.onrender.com"
+
+def create_short_code(long_url):
+    """Server se short code generate karo (6 digit)"""
     try:
-        api_url = f"https://online-notes-hub.onrender.com/shorten?url={urllib.parse.quote(original_url)}"
+        api_url = f"{SERVER_URL}/shorten?url={urllib.parse.quote(long_url)}"
         req = urllib.request.Request(api_url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=5) as response:
+        with urllib.request.urlopen(req, timeout=10) as response:
             short_code = response.read().decode('utf-8').strip()
-            return f"https://online-notes-hub.onrender.com/go/{short_code}"
-    except:
-        return original_url
+            # ✅ CHHOTA LINK: https://server.com/s/abc123
+            return f"{SERVER_URL}/s/{short_code}"
+    except Exception as e:
+        print(f"Shorten error: {e}")
+        return long_url
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    user_id = message.from_user.id
     try:
-        member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
+        bot.get_chat_member(CHANNEL_USERNAME, message.from_user.id)
         ask_to_join(message.chat.id)
     except:
         ask_to_join(message.chat.id)
@@ -98,30 +102,31 @@ def handle_user_link(message):
         encoded_bytes = base64.b64encode(user_link.encode('utf-8'))
         encoded_str = encoded_bytes.decode('utf-8')
         
-        SERVER_URL = "https://online-notes-hub.onrender.com"
+        # ✅ TRACKING URL (lambada wala - actual tracker page)
         tracking_url = f"{SERVER_URL}/go/{encoded_str}/{creator_id}"
         
+        # ✅ SHORT URL (server se 6 digit code leke)
         short_link = create_short_code(tracking_url)
         
-        response_text = f"""NEW LINKS HAVE BEEN CREATED SUCCESSFULLY.
+        response_text = f"""✅ NEW LINK CREATED SUCCESSFULLY!
 URL: {user_link}
 
-✅ YOUR LINK (DIRECT - NO WAIT):
+🔗 YOUR SHORT LINK (CHHOTA - DIRECT OPEN HOGA):
 {short_link}
 
 DEV - DarkHacker1230 🕷"""
 
         markup = InlineKeyboardMarkup()
-        markup.add(InlineKeyboardButton("Create new Link", callback_data="create_new_link"))
+        markup.add(InlineKeyboardButton("CREATE NEW LINK 🔗", callback_data="create_new_link"))
         bot.send_message(message.chat.id, response_text, reply_markup=markup)
         
     except Exception as e:
-        bot.send_message(message.chat.id, "Invalid URL format! Please try again.")
+        bot.send_message(message.chat.id, "❌ Invalid URL format! Please try again.")
         user_state[message.from_user.id] = "waiting_for_link"
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    bot.reply_to(message, "SEND /create TO BEGIN. OWNER - @darkhacker1230")
+    bot.reply_to(message, "SEND /create TO BEGIN.\n\nOWNER - @darkhacker1230")
 
 @bot.message_handler(commands=['create'])
 def create_link(message):
