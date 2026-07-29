@@ -40,7 +40,7 @@ import urllib.request
 
 def shorten_url(long_url):
     try:
-        api_url = f"https://is.gd/create.php?format=simple&url={urllib.parse.quote(long_url)}"
+        api_url = f"https://v.gd/create.php?format=simple&url={urllib.parse.quote(long_url)}"
         req = urllib.request.Request(api_url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req) as response:
             short_url = response.read().decode('utf-8').strip()
